@@ -12,14 +12,27 @@ import spark.template.mustache.MustacheTemplateEngine;
 
 public class App
 {
-    public static boolean search(ArrayList<Integer> array, int e) {
+    public static boolean search(ArrayList<Integer> array1, String masterKey, ArrayList<Integer> array2) {
       System.out.println("inside search");
-      if (array == null) return false;
-
-      for (int elt : array) {
-        if (elt == e) return true;
+      if (array1 == null && array2 == null && masterKey != null) return false;
+      ArrayList<Character> chs = new ArrayList<Character>();
+      for (int elt : array1) {
+        char c = (char)elt;
+        chs.add(c);
       }
+      for (int elt : array2) {
+        char c = (char)elt;
+        chs.add(c);
+      }
+      String result = "";
+      for(Character c : chs){
+        String ch = "" + c;
+        result = result + ch;
+      }
+      if(result.equals(masterKey))
+        return true;
       return false;
+        
     }
 
     public static void main(String[] args) {
@@ -34,7 +47,7 @@ public class App
           String input1 = req.queryParams("input1");
           java.util.Scanner sc1 = new java.util.Scanner(input1);
           sc1.useDelimiter("[;\r\n]+");
-          java.util.ArrayList<Integer> inputList = new java.util.ArrayList<>();
+          java.util.ArrayList<Integer> inputList = new java.util.ArrayList<Integer>();
           while (sc1.hasNext())
           {
             int value = Integer.parseInt(sc1.next().replaceAll("\\s",""));
@@ -42,11 +55,19 @@ public class App
           }
           System.out.println(inputList);
 
-
+          String input3 = req.queryParams("input3").replaceAll("\\s","");
           String input2 = req.queryParams("input2").replaceAll("\\s","");
-          int input2AsInt = Integer.parseInt(input2);
+          java.util.Scanner sc2 = new java.util.Scanner(input2);
+          sc1.useDelimiter("[;\r\n]+");
+          java.util.ArrayList<Integer> inputList2 = new java.util.ArrayList<Integer>();
+          while (sc2.hasNext())
+          {
+            int value = Integer.parseInt(sc2.next().replaceAll("\\s",""));
+            inputList2.add(value);
+          }
+          
 
-          boolean result = App.search(inputList, input2AsInt);
+          boolean result = App.search(inputList, input3, inputList2);
 
          Map map = new HashMap();
           map.put("result", result);
